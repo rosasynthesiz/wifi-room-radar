@@ -1,0 +1,75 @@
+[project]
+name = "wifi-room-radar"
+version = "0.1.0"
+description = "WiFi CSI-based room sensing: motion, presence, room mapping, multi-person tracking, and vital signs"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "rosasynthesiz", email = "rosasynthesiz@users.noreply.github.com" },
+]
+keywords = [
+    "wifi",
+    "csi",
+    "channel-state-information",
+    "sensing",
+    "radar",
+    "presence-detection",
+    "motion-detection",
+    "vital-signs",
+    "breathing",
+    "doppler",
+    "beamforming",
+    "dsp",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: System :: Networking :: Monitoring",
+]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+]
+hardware = [
+    "pyserial>=3.5",
+]
+mqtt = [
+    "paho-mqtt>=2.0",
+]
+websockets = [
+    "websockets>=12",
+]
+
+[project.urls]
+Homepage = "https://github.com/rosasynthesiz/wifi-room-radar"
+Repository = "https://github.com/rosasynthesiz/wifi-room-radar"
+Issues = "https://github.com/rosasynthesiz/wifi-room-radar/issues"
+Changelog = "https://github.com/rosasynthesiz/wifi-room-radar/blob/main/CHANGELOG.md"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["wifi_room_radar*"]
+
+[tool.setuptools.package-data]
+wifi_room_radar = ["dashboard/*"]

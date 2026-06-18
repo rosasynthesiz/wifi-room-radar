@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>wifi-room-radar — live sensing</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='none' stroke='%2334e0b4' stroke-width='2'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%2334e0b4'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo-dot"></span>
+      <h1>wifi-room-radar</h1>
+      <span class="tagline">passive Wi-Fi CSI sensing</span>
+    </div>
+    <div class="source" id="source-info">no source</div>
+    <div class="nodes" id="node-count" hidden>&mdash;</div>
+    <div class="conn">
+      <span class="dot" id="conn-dot"></span>
+      <span id="conn-text">connecting</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- Alert banner: hidden unless the state carries active alerts. -->
+    <section class="alerts" id="alert-banner" hidden></section>
+
+    <section class="cards">
+      <article class="card" id="card-presence">
+        <h2>Presence</h2>
+        <div class="big" id="presence-value">&mdash;</div>
+      </article>
+
+      <article class="card" id="card-motion">
+        <h2>Motion <span class="badge" id="motion-badge">detected</span></h2>
+        <div class="big" id="motion-pct">&mdash;</div>
+        <div class="meter"><div class="fill" id="motion-bar"></div></div>
+      </article>
+
+      <article class="card" id="card-activity">
+        <h2>Activity</h2>
+        <div class="big"><span class="glyph" id="activity-glyph">&middot;</span><span id="activity-value">&mdash;</span></div>
+      </article>
+
+      <article class="card" id="card-breath">
+        <h2>Breathing</h2>
+        <div class="big"><span id="breath-bpm">&mdash;</span><span class="unit">bpm</span></div>
+        <div class="conf">conf <span class="conf-val" id="breath-conf">&mdash;</span>
+          <span class="meter slim"><span class="fill" id="breath-conf-bar"></span></span>
+        </div>
+      </article>
+
+      <article class="card" id="card-heart">
+        <h2>Heart rate</h2>
+        <div class="big"><span id="heart-bpm">&mdash;</span><span class="unit">bpm</span></div>
+        <div class="conf">conf <span class="conf-val" id="heart-conf">&mdash;</span>
+          <span class="meter slim"><span class="fill" id="heart-conf-bar"></span></span>
+        </div>
+      </article>
+
+      <article class="card" id="card-subvocal">
+        <h2>Subvocal <span class="tag">experimental</span></h2>
+        <div class="big" id="subvocal-score">&mdash;</div>
+        <div class="meter"><div class="fill" id="subvocal-bar"></div></div>
+      </article>
+    </section>
+
+    <section class="panel" id="panel-doppler">
+      <h2>Doppler waterfall <span class="hint">+Hz approaching / &minus;Hz receding</span></h2>
+      <canvas id="spectro-canvas"></canvas>
+      <div class="overlay">waiting for data</div>
+    </section>
+
+    <section class="panel" id="panel-room">
+      <h2>Room map <span class="hint">tracks &bull; occupancy &bull; ground truth</span></h2>
+      <canvas id="room-canvas"></canvas>
+      <div class="overlay">waiting for data</div>
+    </section>
+
+    <section class="panel" id="panel-breath">
+      <h2>Breathing waveform</h2>
+      <canvas id="breath-canvas"></canvas>
+      <div class="overlay">waiting for data</div>
+    </section>
+
+    <section class="panel" id="panel-heart">
+      <h2>Heart-rate trend</h2>
+      <canvas id="heart-canvas"></canvas>
+      <div class="overlay">waiting for data</div>
+    </section>
+
+    <section class="panel" id="panel-timeline">
+      <h2>Timeline <span class="hint">last 5 min &bull; presence / motion / breathing</span></h2>
+      <canvas id="timeline-canvas"></canvas>
+      <div class="overlay">waiting for data</div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span id="foot-ts">t = &mdash;</span>
+    <span class="sep"></span>
+    <span id="foot-rate">ui &mdash; Hz</span>
+    <span class="sep"></span>
+    <span id="foot-src">&mdash;</span>
+  </footer>
+
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>
