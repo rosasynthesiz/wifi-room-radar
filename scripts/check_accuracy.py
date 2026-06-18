@@ -60,14 +60,18 @@ GATES = [
         ("subvocal.active_fraction", ">=", 0.3),
         ("breathing.median_abs_err_bpm", "<=", 2.0),
     ]),
+    # Event-anchored scenarios carry an optional 5th element: the minimum
+    # duration to use in --quick mode. These fire an alarm at a fixed sim
+    # time plus a detection latency, so halving the duration (as --quick
+    # does for everything else) can end the run before the alarm can fire.
     ("fall-demo", 45, 1, [
         ("alerts.fall_detected", "==", True),
         ("alerts.false_alert_states", "<=", 0),
-    ]),
+    ], 45),  # fall at t=25s + ~4s latency -> keep the full window
     ("apnea-demo", 80, 1, [
         ("alerts.apnea_detected", "==", True),
         ("alerts.false_alert_states", "<=", 0),
-    ]),
+    ], 80),  # breathing stops at t=40s, alarm ~18s later -> keep full window
 ]
 
 OPS = {
@@ -93,8 +97,13 @@ def main() -> int:
     args = parser.parse_args()
 
     failures: list[str] = []
-    for scenario, duration, nodes, checks in GATES:
-        dur = max(30, duration // 2) if args.quick else duration
+    for gate in GATES:
+        scenario, duration, nodes, checks = gate[:4]
+        # Optional 5th element = the floor for --quick (default 30s). Event
+        # scenarios pin this to their full duration so the alarm has time to
+        # fire; everything else is safely halved.
+        quick_floor = gate[4] if len(gate) > 4 else 30
+        dur = max(quick_floor, duration // 2) if args.quick else duration
         metrics = run(scenario, float(dur), args.seed, nodes=nodes)
         tag = f"{scenario}[n={nodes}]"
         for path, op, threshold in checks:
